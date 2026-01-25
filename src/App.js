@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
 import Section from "./Section";
+import { FeedbackContext } from "./FeedbackContext";
 
 export default function App() {
   const [good, setGood] = useState(0);
@@ -8,6 +9,8 @@ export default function App() {
   const [bad, setBad] = useState(0);
   const [total, setTotal] = useState(0);
   const [positive, setPositive] = useState(0);
+
+  const goodBtnRef = useRef(null);
 
   const add = (type) => {
     if (type === "good") {
@@ -30,6 +33,10 @@ export default function App() {
     } else {
       setPositive(Math.round((good / sum) * 100));
     }
+
+    if (goodBtnRef.current) {
+      console.log(goodBtnRef.current);
+    }
   }, [good, neutral, bad]);
 
   let statisticsBlock;
@@ -49,22 +56,9 @@ export default function App() {
   }
 
   return (
-    <>
-      <Section title="Please leave feedback">
-        <button className="button" onClick={() => add("good")}>
-          Good
-        </button>
-        <button className="button" onClick={() => add("neutral")}>
-          Neutral
-        </button>
-        <button className="button" onClick={() => add("bad")}>
-          Bad
-        </button>
-      </Section>
-
-      <Section title="Statistics">
-        {statisticsBlock}
-      </Section>
-    </>
+    <FeedbackContext.Provider value={{ add, goodBtnRef }}>
+      <Section title="Please leave feedback" type="buttons" />
+      <Section title="Statistics">{statisticsBlock}</Section>
+    </FeedbackContext.Provider>
   );
 }
