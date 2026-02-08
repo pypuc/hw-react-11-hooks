@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, memo } from "react";
 import { FeedbackContext } from "./FeedbackContext";
 
-export default function Section({ title, children, type }) {
+function Section({ title, children, type }) {
   const context = useContext(FeedbackContext);
 
   let content;
@@ -35,3 +35,5 @@ export default function Section({ title, children, type }) {
     </section>
   );
 }
+
+export default memo(Section);

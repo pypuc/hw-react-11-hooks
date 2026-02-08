@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "./styles.css";
 import Section from "./Section";
 import { FeedbackContext } from "./FeedbackContext";
@@ -7,6 +7,10 @@ import { useFeedback } from "./hooks/useFeedback";
 export default function App() {
   const { good, neutral, bad, total, positive, add, goodBtnRef } =
     useFeedback();
+
+  const contextValue = useMemo(() => {
+    return { add, goodBtnRef };
+  }, [add]);
 
   let statisticsBlock;
 
@@ -25,7 +29,7 @@ export default function App() {
   }
 
   return (
-    <FeedbackContext.Provider value={{ add, goodBtnRef }}>
+    <FeedbackContext.Provider value={contextValue}>
       <Section title="Please leave feedback" type="buttons" />
       <Section title="Statistics">{statisticsBlock}</Section>
     </FeedbackContext.Provider>
